@@ -40,7 +40,7 @@ I need to present the data collected to the client after the user has made their
 
 Group 4
 
-The sales team has really outdone themselves this time. They drudged up from the bottom of the barrel twenty of the most god-awful products I have ever had the misfortune to try to market to a customer. Thankfully the budget for the catalog is so small I cannot fit twenty products into it. So now I get to share my misery with the developer that was desperate enough to want to work for me and set him loose on the interns to find out which products I can remove from further consideration for the catalog.
+The sales team has really outdone themselves this time. They drudged up from the bottom of the barrel twenty of the most god-awful products I have ever had the misfortune to try to market to a customer. Thankfully the budget for the catalog is so small I cannot fit twenty products into it. So now I get to share my misery with the developer that was desperate enough to want to work for us and set him loose on the interns to find out which products I can remove from further consideration for the catalog.
 
 As a marketing intern I am happy to be able to take a break from coffee runs and assist the marketing VP in deciding what products will be offered in our Winter catalog. I have been told to select which products I would most likely want to purchase. Hopefully someday I will get paid enough to actually be able to afford these fine products I am about to be presented with.
 
