@@ -3,12 +3,12 @@
 var allImages = [];
 var imagesDisplayed = [];
 var productVote = [];
-var a = 0;
-var b = 0;
-var c = 0;
-var x = allImages.length + 1;
-var y = allImages.length + 1;
-var z = -allImages.length + 1;
+var randomForFirst = 0;
+var randomForSecond = 0;
+var randomForThird = 0;
+var previouseForFirst = 0;
+var previouseForSecond = 0;
+var previouseForThird = 0;
 var submitVote = 0;
 
 console.log('Global variables declared');
@@ -41,50 +41,50 @@ function populateAllImages() {
   new CreateAllImages('WaterCan', 'img/water-can.jpg');
   new CreateAllImages('WineGlass', 'img/wine-glass.jpg');
 }
-
+populateAllImages();
 function createRandomNumber() {
   return Math.floor(Math.random() * (allImages.length));
 }
 
-function randomNumber() {
-  a = createRandomNumber();
-  while (a === x || a === y || a === z){
-    a = createRandomNumber();
+function randomAllImages() {
+  randomForFirst = createRandomNumber();
+  while (randomForFirst === previouseForFirst || randomForFirst === previouseForSecond || randomForFirst === previouseForThird){
+    randomForFirst = createRandomNumber();
   }
-  b = createRandomNumber();
-  while (b === a || b === x || a === y || a === z) {
-    b = createRandomNumber();
+  randomForSecond = createRandomNumber();
+  while (randomForSecond === randomForFirst || randomForSecond === previouseForFirst || randomForSecond === previouseForSecond || randomForSecond === previouseForThird) {
+    randomForSecond = createRandomNumber();
   }
-  c = createRandomNumber();
-  while (c === b || c === a || c === x || c === y || c === z){
-    c = createRandomNumber();
+  randomForThird = createRandomNumber();
+  while (randomForThird === randomForFirst || randomForThird === randomForSecond || randomForThird === previouseForFirst || randomForThird === previouseForSecond || randomForThird === previouseForThird){
+    randomForThird = createRandomNumber();
   }
 
-  console.log(a + ' Value for A');
-  console.log(b + ' Value for B');
-  console.log(c + ' Value for C');
-  console.log(allImages);
-  x = a;
-  y = b;
-  z = c;
-  console.log(x + ' Value for X inside createRandomNumber');
-  console.log(y + ' Value for Y inside createRandomNumber');
-  console.log(z + ' Value for Z inside createRandomNumber');
+  console.log(randomForFirst + ' Value for First');
+  console.log(randomForSecond + ' Value for Second');
+  console.log(randomForThird + ' Value for Third');
+
+  previouseForFirst = randomForFirst;
+  previouseForSecond = randomForSecond;
+  previouseForThird = randomForThird;
+  console.log(previouseForFirst + ' Value for previouseForFirst inside createRandomNumber');
+  console.log(previouseForSecond + ' Value for previouseForSecond inside createRandomNumber');
+  console.log(previouseForThird + ' Value for previouseForThird inside createRandomNumber');
   // return (x,y,z);
 };
 
 function displayImages() {
-  populateAllImages();
-  randomNumber();
-  console.log(x + ' Outside value for X');
-  console.log(y + ' Outside value for Y');
-  console.log(z + ' Outside value for Z');
-  var imageOne = allImages[a].filePath;
-  imagesDisplayed.push(allImages[a].name);
-  var imageTwo = allImages[b].filePath;
-  imagesDisplayed.push(allImages[b].name);
-  var imageThree = allImages[c].filePath;
-  imagesDisplayed.push(allImages[c].name);
+  randomAllImages();
+  console.log(previouseForFirst + ' Outside value for X');
+  console.log(previouseForSecond + ' Outside value for Y');
+  console.log(previouseForThird + ' Outside value for Z');
+  var imageOne = allImages[randomForFirst].filePath;
+  imagesDisplayed.push(allImages[randomForFirst].name);
+  var imageTwo = allImages[randomForSecond].filePath;
+  imagesDisplayed.push(allImages[randomForSecond].name);
+  var imageThree = allImages[randomForThird].filePath;
+  imagesDisplayed.push(allImages[randomForThird].name);
+  console.log(imagesDisplayed + 'images Displayed');
 
   var imageOneEl = document.getElementById('imageOne');
   imageOneEl.src = imageOne;
@@ -92,33 +92,44 @@ function displayImages() {
   imageTwoEl.src = imageTwo;
   var imageThreeEl = document.getElementById('imageThree');
   imageThreeEl.src = imageThree;
-  imagesDisplayed.push(imageOne,imageTwo,imageThree);
+//  imagesDisplayed.push(imageOne,imageTwo,imageThree);
 }
-displayImages();
 console.log(imagesDisplayed + ' Images Displayed');
 
-while (submitVote < 25) {
+  displayImages();
   var imageOneClick = document.getElementById('imageOne');
   var imageTwoClick = document.getElementById('imageTwo');
   var imageThreeClick = document.getElementById('imageThree');
-  imageOneClick.addEventListener('click', clickOne) ;
-  imageTwoClick.addEventListener('click', clickTwo) ;
-  imageThreeClick.addEventListener('click', clickThree) ;
 
-  console.log(submitVote + ' Inside Function');
-  submitVote++;
-  displayImages();
-}
-function clickOne() {
-  productVote.push(allImages[a].name);
-}
-function clickTwo() {
-  productVote.push(allImages[b].name);
-}
-function clickThree() {
-  productVote.push(allImages[c].name);
-}
 
-// var imgEl = document.getElementById('goat-pic');
-//
-// imgEl.addEventListener('click', randomGoat);
+  function clickOne() {
+    productVote.push(allImages[randomForFirst].name);
+    displayImages();
+    submitVote++
+    console.log(submitVote + 'click one');
+  }
+  function clickTwo() {
+    productVote.push(allImages[randomForSecond].name);
+    displayImages();
+    submitVote++
+    console.log(submitVote + 'click two');
+      }
+  function clickThree() {
+    productVote.push(allImages[randomForThird].name);
+    displayImages();
+    submitVote++
+    console.log(submitVote + 'click three');
+      }
+  if (submitVote < 25) {
+    imageOneClick.addEventListener('click', clickOne) ;
+    imageTwoClick.addEventListener('click', clickTwo) ;
+    imageThreeClick.addEventListener('click', clickThree) ;
+    console.log(submitVote + ' submitVote 1');
+  }
+
+  if (submitVote > 24) {
+    imageOneClick.removeEventListener('click', clickOne) ;
+    imageTwoClick.removeEventListener('click', clickTwo) ;
+    imageThreeClick.removeEventListener('click', clickThree) ;
+    console.log(submitVote + ' submitVote 2');
+}
