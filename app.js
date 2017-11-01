@@ -13,6 +13,7 @@ var submitVote = 0;
 
 console.log('Global variables declared');
 
+// debugger;
 function CreateAllImages(name, filePath) {
   this.name = name;
   this.filePath = filePath;
@@ -59,32 +60,20 @@ function randomAllImages() {
   while (randomForThird === randomForFirst || randomForThird === randomForSecond || randomForThird === previouseForFirst || randomForThird === previouseForSecond || randomForThird === previouseForThird){
     randomForThird = createRandomNumber();
   }
-
-  console.log(randomForFirst + ' Value for First');
-  console.log(randomForSecond + ' Value for Second');
-  console.log(randomForThird + ' Value for Third');
-
   previouseForFirst = randomForFirst;
   previouseForSecond = randomForSecond;
   previouseForThird = randomForThird;
-  console.log(previouseForFirst + ' Value for previouseForFirst inside createRandomNumber');
-  console.log(previouseForSecond + ' Value for previouseForSecond inside createRandomNumber');
-  console.log(previouseForThird + ' Value for previouseForThird inside createRandomNumber');
-  // return (x,y,z);
 };
 
 function displayImages() {
   randomAllImages();
-  console.log(previouseForFirst + ' Outside value for X');
-  console.log(previouseForSecond + ' Outside value for Y');
-  console.log(previouseForThird + ' Outside value for Z');
   var imageOne = allImages[randomForFirst].filePath;
   imagesDisplayed.push(allImages[randomForFirst].name);
   var imageTwo = allImages[randomForSecond].filePath;
   imagesDisplayed.push(allImages[randomForSecond].name);
   var imageThree = allImages[randomForThird].filePath;
   imagesDisplayed.push(allImages[randomForThird].name);
-  console.log(imagesDisplayed + 'images Displayed');
+  // console.log(imagesDisplayed + 'images Displayed');
 
   var imageOneEl = document.getElementById('imageOne');
   imageOneEl.src = imageOne;
@@ -94,42 +83,40 @@ function displayImages() {
   imageThreeEl.src = imageThree;
 //  imagesDisplayed.push(imageOne,imageTwo,imageThree);
 }
-console.log(imagesDisplayed + ' Images Displayed');
+// console.log(imagesDisplayed + ' Images Displayed');
 
-  displayImages();
-  var imageOneClick = document.getElementById('imageOne');
-  var imageTwoClick = document.getElementById('imageTwo');
-  var imageThreeClick = document.getElementById('imageThree');
-
-
+displayImages();
+debugger;
+if (productVote.length < 25) {
+  console.log(productVote.length + ' productVote length inside of if.');
   function clickOne() {
     productVote.push(allImages[randomForFirst].name);
     displayImages();
-    submitVote++
-    console.log(submitVote + 'click one');
+    //console.log(productVote + ' click one, productVote');
   }
   function clickTwo() {
     productVote.push(allImages[randomForSecond].name);
     displayImages();
-    submitVote++
-    console.log(submitVote + 'click two');
+    //console.log(productVote + ' click two, productVote');
       }
   function clickThree() {
     productVote.push(allImages[randomForThird].name);
+    //console.log(productVote + ' click three, productVote');
     displayImages();
-    submitVote++
-    console.log(submitVote + 'click three');
       }
-  if (submitVote < 25) {
+
+    // event.preventDefault();
+    var imageOneClick = document.getElementById('imageOne');
+    var imageTwoClick = document.getElementById('imageTwo');
+    var imageThreeClick = document.getElementById('imageThree');
     imageOneClick.addEventListener('click', clickOne) ;
     imageTwoClick.addEventListener('click', clickTwo) ;
     imageThreeClick.addEventListener('click', clickThree) ;
-    console.log(submitVote + ' submitVote 1');
-  }
+}
 
-  if (submitVote > 24) {
+  if (productVote.length > 24) {
     imageOneClick.removeEventListener('click', clickOne) ;
     imageTwoClick.removeEventListener('click', clickTwo) ;
     imageThreeClick.removeEventListener('click', clickThree) ;
-    console.log(submitVote + ' submitVote 2');
+    console.log(productVote.length + ' ProductVote > 24');
 }
