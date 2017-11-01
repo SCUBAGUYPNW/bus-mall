@@ -97,15 +97,6 @@ function displayImages() {
 displayImages();
 console.log(imagesDisplayed + ' Images Displayed');
 
-function clickOne() {
-  productVote.push(allImages[a].name);
-}
-function clickTwo() {
-  productVote.push(allImages[b].name);
-}
-function clickThree() {
-  productVote.push(allImages[c].name);
-}
 while (submitVote < 25) {
   var imageOneClick = document.getElementById('imageOne');
   var imageTwoClick = document.getElementById('imageTwo');
@@ -117,6 +108,15 @@ while (submitVote < 25) {
   console.log(submitVote + ' Inside Function');
   submitVote++;
   displayImages();
+}
+function clickOne() {
+  productVote.push(allImages[a].name);
+}
+function clickTwo() {
+  productVote.push(allImages[b].name);
+}
+function clickThree() {
+  productVote.push(allImages[c].name);
 }
 
 // var imgEl = document.getElementById('goat-pic');
