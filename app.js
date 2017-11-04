@@ -1,15 +1,13 @@
 'use strict';
 
 var allImages = [];
-var imagesDisplayed = [];
-var productVote = [];
 var randomForFirst = 0;
 var randomForSecond = 0;
 var randomForThird = 0;
 var previouseForFirst = 0;
 var previouseForSecond = 0;
 var previouseForThird = 0;
-var submitVote = 0;
+var voteTotal = 0;
 
 console.log('Global variables declared');
 
@@ -17,7 +15,17 @@ console.log('Global variables declared');
 function CreateAllImages(name, filePath) {
   this.name = name;
   this.filePath = filePath;
+  this.numClicks = 0;
+  this.numDisplayed = 0;
   allImages.push(this);
+
+  this.imageVote = function() {
+    this.numClicks++;
+  };
+
+  this.imagesDisplayed = function() {
+    this.numDisplayed++;
+  };
 }
 
 function populateAllImages() {
@@ -43,6 +51,7 @@ function populateAllImages() {
   new CreateAllImages('WineGlass', 'img/wine-glass.jpg');
 }
 populateAllImages();
+
 function createRandomNumber() {
   return Math.floor(Math.random() * (allImages.length));
 }
@@ -64,74 +73,59 @@ function randomAllImages() {
   previouseForSecond = randomForSecond;
   previouseForThird = randomForThird;
 };
-debugger;
+
+var imageOneEl = document.getElementById('imageOne');
+var imageTwoEl = document.getElementById('imageTwo');
+var imageThreeEl = document.getElementById('imageThree');
+imageOneEl.addEventListener('click', clickOne) ;
+imageTwoEl.addEventListener('click', clickTwo) ;
+imageThreeEl.addEventListener('click', clickThree) ;
+
 function displayImages() {
-  if (productVote.length < 26) {
+  if (voteTotal < 25) {
     randomAllImages();
     var imageOne = allImages[randomForFirst].filePath;
-    imagesDisplayed.push(allImages[randomForFirst].name);
+    allImages[randomForFirst].imagesDisplayed();
     var imageTwo = allImages[randomForSecond].filePath;
-    imagesDisplayed.push(allImages[randomForSecond].name);
+    allImages[randomForSecond].imagesDisplayed();
     var imageThree = allImages[randomForThird].filePath;
-    imagesDisplayed.push(allImages[randomForThird].name);
-    console.log(productVote.length + ' productVote length');
-    // console.log(imagesDisplayed + 'images Displayed');
-    var imageOneEl = document.getElementById('imageOne');
+    allImages[randomForThird].imagesDisplayed();
     imageOneEl.src = imageOne;
-    var imageTwoEl = document.getElementById('imageTwo');
     imageTwoEl.src = imageTwo;
-    var imageThreeEl = document.getElementById('imageThree');
     imageThreeEl.src = imageThree;
-    processClicks();
+    voteTotal++;
   } else {
     removeClicks();
   }
 }
 
-var imageOneClick = document.getElementById('imageOne');
-var imageTwoClick = document.getElementById('imageTwo');
-var imageThreeClick = document.getElementById('imageThree');
-
 function removeClicks() {
-  imageOneClick.removeEventListener('click', displayChart) ;
-  imageTwoClick.removeEventListener('click',displayChart) ;
-  imageThreeClick.removeEventListener('click',displayChart) ;
+  imageOneEl.removeEventListener('click', clickOne) ;
+  imageTwoEl.removeEventListener('click', clickTwo) ;
+  imageThreeEl.removeEventListener('click', clickThree) ;
   console.log('Remove Clicks Function');
   displayChart();
 }
 
 function displayChart () {
   console.log('This is how the chart will appear.');
+  console.log(allImages);
 }
 
-//  imagesDisplayed.push(imageOne,imageTwo,imageThree);
-
-// console.log(imagesDisplayed + ' Images Displayed');
-
 displayImages();
-// debugger;
 
 function clickOne() {
-  productVote.push(allImages[randomForFirst].name);
+  allImages[randomForFirst].imageVote();
   displayImages();
   //console.log(productVote + ' click one, productVote');
 }
 function clickTwo() {
-  productVote.push(allImages[randomForSecond].name);
+  allImages[randomForSecond].imageVote();
   displayImages();
   //console.log(productVote + ' click two, productVote');
 }
 function clickThree() {
-  productVote.push(allImages[randomForThird].name);
+  allImages[randomForThird].imageVote();
   //console.log(productVote + ' click three, productVote');
   displayImages();
-}
-
-// event.preventDefault();
-
-function processClicks() {
-  imageOneClick.addEventListener('click', clickOne) ;
-  imageTwoClick.addEventListener('click', clickTwo) ;
-  imageThreeClick.addEventListener('click', clickThree) ;
-  console.log(productVote.length + ' ProductVote > 24');
 }
