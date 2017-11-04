@@ -1,22 +1,31 @@
 'use strict';
 
 var allImages = [];
-var imagesDisplayed = [];
-var productVote = [];
-var a = 0;
-var b = 0;
-var c = 0;
-var x = allImages.length + 1;
-var y = allImages.length + 1;
-var z = -allImages.length + 1;
-var submitVote = 0;
+var randomForFirst = 0;
+var randomForSecond = 0;
+var randomForThird = 0;
+var previouseForFirst = 0;
+var previouseForSecond = 0;
+var previouseForThird = 0;
+var voteTotal = 0;
 
 console.log('Global variables declared');
 
+// debugger;
 function CreateAllImages(name, filePath) {
   this.name = name;
   this.filePath = filePath;
+  this.numClicks = 0;
+  this.numDisplayed = 0;
   allImages.push(this);
+
+  this.imageVote = function() {
+    this.numClicks++;
+  };
+
+  this.imagesDisplayed = function() {
+    this.numDisplayed++;
+  };
 }
 
 function populateAllImages() {
@@ -41,84 +50,82 @@ function populateAllImages() {
   new CreateAllImages('WaterCan', 'img/water-can.jpg');
   new CreateAllImages('WineGlass', 'img/wine-glass.jpg');
 }
+populateAllImages();
 
 function createRandomNumber() {
   return Math.floor(Math.random() * (allImages.length));
 }
 
-function randomNumber() {
-  a = createRandomNumber();
-  while (a === x || a === y || a === z){
-    a = createRandomNumber();
+function randomAllImages() {
+  randomForFirst = createRandomNumber();
+  while (randomForFirst === previouseForFirst || randomForFirst === previouseForSecond || randomForFirst === previouseForThird){
+    randomForFirst = createRandomNumber();
   }
-  b = createRandomNumber();
-  while (b === a || b === x || a === y || a === z) {
-    b = createRandomNumber();
+  randomForSecond = createRandomNumber();
+  while (randomForSecond === randomForFirst || randomForSecond === previouseForFirst || randomForSecond === previouseForSecond || randomForSecond === previouseForThird) {
+    randomForSecond = createRandomNumber();
   }
-  c = createRandomNumber();
-  while (c === b || c === a || c === x || c === y || c === z){
-    c = createRandomNumber();
+  randomForThird = createRandomNumber();
+  while (randomForThird === randomForFirst || randomForThird === randomForSecond || randomForThird === previouseForFirst || randomForThird === previouseForSecond || randomForThird === previouseForThird){
+    randomForThird = createRandomNumber();
   }
-
-  console.log(a + ' Value for A');
-  console.log(b + ' Value for B');
-  console.log(c + ' Value for C');
-  console.log(allImages);
-  x = a;
-  y = b;
-  z = c;
-  console.log(x + ' Value for X inside createRandomNumber');
-  console.log(y + ' Value for Y inside createRandomNumber');
-  console.log(z + ' Value for Z inside createRandomNumber');
-  // return (x,y,z);
+  previouseForFirst = randomForFirst;
+  previouseForSecond = randomForSecond;
+  previouseForThird = randomForThird;
 };
 
-function displayImages() {
-  populateAllImages();
-  randomNumber();
-  console.log(x + ' Outside value for X');
-  console.log(y + ' Outside value for Y');
-  console.log(z + ' Outside value for Z');
-  var imageOne = allImages[a].filePath;
-  imagesDisplayed.push(allImages[a].name);
-  var imageTwo = allImages[b].filePath;
-  imagesDisplayed.push(allImages[b].name);
-  var imageThree = allImages[c].filePath;
-  imagesDisplayed.push(allImages[c].name);
+var imageOneEl = document.getElementById('imageOne');
+var imageTwoEl = document.getElementById('imageTwo');
+var imageThreeEl = document.getElementById('imageThree');
+imageOneEl.addEventListener('click', clickOne) ;
+imageTwoEl.addEventListener('click', clickTwo) ;
+imageThreeEl.addEventListener('click', clickThree) ;
 
-  var imageOneEl = document.getElementById('imageOne');
-  imageOneEl.src = imageOne;
-  var imageTwoEl = document.getElementById('imageTwo');
-  imageTwoEl.src = imageTwo;
-  var imageThreeEl = document.getElementById('imageThree');
-  imageThreeEl.src = imageThree;
-  imagesDisplayed.push(imageOne,imageTwo,imageThree);
+function displayImages() {
+  if (voteTotal < 25) {
+    randomAllImages();
+    var imageOne = allImages[randomForFirst].filePath;
+    allImages[randomForFirst].imagesDisplayed();
+    var imageTwo = allImages[randomForSecond].filePath;
+    allImages[randomForSecond].imagesDisplayed();
+    var imageThree = allImages[randomForThird].filePath;
+    allImages[randomForThird].imagesDisplayed();
+    imageOneEl.src = imageOne;
+    imageTwoEl.src = imageTwo;
+    imageThreeEl.src = imageThree;
+    voteTotal++;
+  } else {
+    removeClicks();
+  }
 }
+
+function removeClicks() {
+  imageOneEl.removeEventListener('click', clickOne) ;
+  imageTwoEl.removeEventListener('click', clickTwo) ;
+  imageThreeEl.removeEventListener('click', clickThree) ;
+  console.log('Remove Clicks Function');
+  displayChart();
+}
+
+function displayChart () {
+  console.log('This is how the chart will appear.');
+  console.log(allImages);
+}
+
 displayImages();
-console.log(imagesDisplayed + ' Images Displayed');
 
 function clickOne() {
-  productVote.push(allImages[a].name);
+  allImages[randomForFirst].imageVote();
+  displayImages();
+  //console.log(productVote + ' click one, productVote');
 }
 function clickTwo() {
-  productVote.push(allImages[b].name);
+  allImages[randomForSecond].imageVote();
+  displayImages();
+  //console.log(productVote + ' click two, productVote');
 }
 function clickThree() {
-  productVote.push(allImages[c].name);
-}
-while (submitVote < 25) {
-  var imageOneClick = document.getElementById('imageOne');
-  var imageTwoClick = document.getElementById('imageTwo');
-  var imageThreeClick = document.getElementById('imageThree');
-  imageOneClick.addEventListener('click', clickOne) ;
-  imageTwoClick.addEventListener('click', clickTwo) ;
-  imageThreeClick.addEventListener('click', clickThree) ;
-
-  console.log(submitVote + ' Inside Function');
-  submitVote++;
+  allImages[randomForThird].imageVote();
+  //console.log(productVote + ' click three, productVote');
   displayImages();
 }
-
-// var imgEl = document.getElementById('goat-pic');
-//
-// imgEl.addEventListener('click', randomGoat);
