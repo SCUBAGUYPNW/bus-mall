@@ -12,7 +12,12 @@ var previouseForSecond = 0;
 var previouseForThird = 0;
 var voteTotal = 0;
 
-console.log('Global variables declared');
+if (localStorage.getItem('productData')){
+  allImages = [];
+  allImages = JSON.parse(localStorage.getItem('productData'));
+} else {
+  populateAllImages();
+}
 
 // debugger;
 function CreateAllImages(name, filePath) {
@@ -21,15 +26,10 @@ function CreateAllImages(name, filePath) {
   this.numClicks = 0;
   this.numDisplayed = 0;
   allImages.push(this);
+};
 
-  this.imageVote = function() {
-    this.numClicks++;
-  };
-
-  this.imagesDisplayed = function() {
-    this.numDisplayed++;
-  };
-}
+var allImagesString = JSON.stringify(allImages);
+localStorage.setItem('productData', allImagesString);
 
 function populateAllImages() {
   new CreateAllImages('Bag', 'img/bag.jpg');
@@ -53,7 +53,8 @@ function populateAllImages() {
   new CreateAllImages('WaterCan', 'img/water-can.jpg');
   new CreateAllImages('WineGlass', 'img/wine-glass.jpg');
 }
-populateAllImages();
+var allImagesString = JSON.stringify(allImages);
+localStorage.setItem('productData', allImagesString);
 
 function createRandomNumber() {
   return Math.floor(Math.random() * (allImages.length));
@@ -88,11 +89,11 @@ function displayImages() {
   if (voteTotal < 25) {
     randomAllImages();
     var imageOne = allImages[randomForFirst].filePath;
-    allImages[randomForFirst].imagesDisplayed();
+    allImages[randomForFirst].numDisplayed++;
     var imageTwo = allImages[randomForSecond].filePath;
-    allImages[randomForSecond].imagesDisplayed();
+    allImages[randomForSecond].numDisplayed++;
     var imageThree = allImages[randomForThird].filePath;
-    allImages[randomForThird].imagesDisplayed();
+    allImages[randomForThird].numDisplayed++;
     imageOneEl.src = imageOne;
     imageTwoEl.src = imageTwo;
     imageThreeEl.src = imageThree;
@@ -106,19 +107,55 @@ function removeClicks() {
   imageOneEl.removeEventListener('click', clickOne) ;
   imageTwoEl.removeEventListener('click', clickTwo) ;
   imageThreeEl.removeEventListener('click', clickThree) ;
-  console.log('Remove Clicks Function');
   displayChart();
 }
+
 function populateArrays() {
   for ( var i = 0; i < allImages.length; i++) {
     productName.push(allImages[i].name);
     productVote.push(allImages[i].numClicks);
     productDisplayed.push(allImages[i].numDisplayed);
-    console.log(productName);
-    console.log(productVote);
-    console.log(productDisplayed);
+  }
+  console.log(productVote + ' productVote');
+  console.log(productName + ' productName');
+  console.log(productDisplayed + 'Number of times Product Displayed');
+  var productNameString = JSON.stringify(productName);
+  localStorage.productNameData = productNameString;
+
+  if (localStorage.getItem('custVoteData')){
+    var lastVoteArray = JSON.parse(localStorage.getItem('custVoteData'));
+    var cumulativeVoteData = [];
+    for (var j = 0; j < productVote.length; j++) {
+      cumulativeVoteData.push(productVote[j] + lastVoteArray[j]);
+      console.log(lastVoteArray + ' lastVoteArray');
+      console.log(productVote + ' productVote');
+      console.log(cumulativeVoteData + ' cumulativeVoteData');
+      console.log(productVote[j], lastVoteArray[j] + ' two');
+      console.log(productVote[j] + ' j');
+    }
+    var productVoteString = JSON.stringify(cumulativeVoteData);
+    localStorage.custVoteData = productVoteString;
+
+  } else {
+    var productVoteString = JSON.stringify(productVote);
+    localStorage.custVoteData = productVoteString;
+  }
+  if (localStorage.getItem('productDisplayedData')){
+    var lastProductDisplayedData = JSON.parse(localStorage.getItem('productDisplayedData'));
+    var cumulativeProductDisplayedData = [];
+    for (var k = 0; k < productName.length; k++) {
+      cumulativeProductDisplayedData.push(lastProductDisplayedData[k] + productDisplayed[k]);
+      console.log(cumulativeProductDisplayedData + ' cumulativeProductDisplayedData');
+    }
+    var productDisplayedString = JSON.stringify(productDisplayed);
+    localStorage.productDisplayedData = productNameString;
+
+  } else {
+    var productDisplayedString = JSON.stringify(productDisplayed);
+    localStorage.productDisplayedData = productNameString;
   }
 }
+
 
 function displayChart () {
   populateArrays();
@@ -236,24 +273,22 @@ function displayChart () {
       maintainAspectRatio: false
     }
   });
-
-  console.log(allImages);
 }
 
 displayImages();
 
 function clickOne() {
-  allImages[randomForFirst].imageVote();
+  allImages[randomForFirst].numClicks++;
   displayImages();
   //console.log(productVote + ' click one, productVote');
 }
 function clickTwo() {
-  allImages[randomForSecond].imageVote();
+  allImages[randomForSecond].numClicks++;
   displayImages();
   //console.log(productVote + ' click two, productVote');
 }
 function clickThree() {
-  allImages[randomForThird].imageVote();
+  allImages[randomForThird].numClicks++;
   //console.log(productVote + ' click three, productVote');
   displayImages();
 }
