@@ -1,6 +1,9 @@
 'use strict';
 
 var allImages = [];
+var productName = [];
+var productVote = [];
+var productDisplayed = [];
 var randomForFirst = 0;
 var randomForSecond = 0;
 var randomForThird = 0;
@@ -9,7 +12,12 @@ var previouseForSecond = 0;
 var previouseForThird = 0;
 var voteTotal = 0;
 
-console.log('Global variables declared');
+if (localStorage.getItem('productData')){
+  allImages = [];
+  allImages = JSON.parse(localStorage.getItem('productData'));
+} else {
+  populateAllImages();
+}
 
 // debugger;
 function CreateAllImages(name, filePath) {
@@ -18,15 +26,10 @@ function CreateAllImages(name, filePath) {
   this.numClicks = 0;
   this.numDisplayed = 0;
   allImages.push(this);
+};
 
-  this.imageVote = function() {
-    this.numClicks++;
-  };
-
-  this.imagesDisplayed = function() {
-    this.numDisplayed++;
-  };
-}
+var allImagesString = JSON.stringify(allImages);
+localStorage.setItem('productData', allImagesString);
 
 function populateAllImages() {
   new CreateAllImages('Bag', 'img/bag.jpg');
@@ -50,7 +53,8 @@ function populateAllImages() {
   new CreateAllImages('WaterCan', 'img/water-can.jpg');
   new CreateAllImages('WineGlass', 'img/wine-glass.jpg');
 }
-populateAllImages();
+var allImagesString = JSON.stringify(allImages);
+localStorage.setItem('productData', allImagesString);
 
 function createRandomNumber() {
   return Math.floor(Math.random() * (allImages.length));
@@ -85,11 +89,11 @@ function displayImages() {
   if (voteTotal < 25) {
     randomAllImages();
     var imageOne = allImages[randomForFirst].filePath;
-    allImages[randomForFirst].imagesDisplayed();
+    allImages[randomForFirst].numDisplayed++;
     var imageTwo = allImages[randomForSecond].filePath;
-    allImages[randomForSecond].imagesDisplayed();
+    allImages[randomForSecond].numDisplayed++;
     var imageThree = allImages[randomForThird].filePath;
-    allImages[randomForThird].imagesDisplayed();
+    allImages[randomForThird].numDisplayed++;
     imageOneEl.src = imageOne;
     imageTwoEl.src = imageTwo;
     imageThreeEl.src = imageThree;
@@ -103,29 +107,185 @@ function removeClicks() {
   imageOneEl.removeEventListener('click', clickOne) ;
   imageTwoEl.removeEventListener('click', clickTwo) ;
   imageThreeEl.removeEventListener('click', clickThree) ;
-  console.log('Remove Clicks Function');
   displayChart();
 }
 
+function populateArrays() {
+  for ( var i = 0; i < allImages.length; i++) {
+    productName.push(allImages[i].name);
+    productVote.push(allImages[i].numClicks);
+    productDisplayed.push(allImages[i].numDisplayed);
+  }
+  console.log(productVote + ' productVote');
+  console.log(productName + ' productName');
+  console.log(productDisplayed + 'Number of times Product Displayed');
+  var productNameString = JSON.stringify(productName);
+  localStorage.productNameData = productNameString;
+
+  if (localStorage.getItem('custVoteData')){
+    var lastVoteArray = JSON.parse(localStorage.getItem('custVoteData'));
+    console.log(lastVoteArray + ' lastVoteArray');
+    var cumulativeVoteData = [];
+    for (var j = 0; j < productVote.length; j++) {
+      cumulativeVoteData.push(productVote[j] + lastVoteArray[j]);
+      console.log(productVote[j], lastVoteArray[j]);
+    }
+    console.log(cumulativeVoteData + ' cumulativeVoteData');
+    var cumulativeVoteDataString = JSON.stringify(cumulativeVoteData);
+    localStorage.custVoteData = cumulativeVoteDataString;
+
+  } else {
+    var productVoteString = JSON.stringify(productVote);
+    localStorage.custVoteData = productVoteString;
+  }
+  if (localStorage.getItem('productDisplayedData')){
+    var lastProductDisplayedData = JSON.parse(localStorage.getItem('productDisplayedData'));
+    var cumulativeProductDisplayedData = [];
+    for (var k = 0; k < productName.length; k++) {
+      cumulativeProductDisplayedData.push(lastProductDisplayedData[k] + productDisplayed[k]);
+    }
+    var cumulativeProductDisplayedString = JSON.stringify(cumulativeProductDisplayedData);
+    localStorage.productDisplayedData = cumulativeProductDisplayedString;
+
+  } else {
+    var productDisplayedString = JSON.stringify(productDisplayed);
+    localStorage.productDisplayedData = productDisplayedString;
+  }
+}
+
+
 function displayChart () {
-  console.log('This is how the chart will appear.');
-  console.log(allImages);
+  populateArrays();
+  var ctx = document.getElementById('productChart').getContext('2d');
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: productName,
+      datasets: [{
+        label: 'Number of Votes',
+        data: productVote,
+        backgroundColor: [
+          '#e6194b',
+          '#3cb44b',
+          '#ffe119',
+          '#0082c8',
+          '#f58231',
+          '#911eb4',
+          '#46f0f0',
+          '#f032e6',
+          '#d2f53c',
+          '#fabebe',
+          '#008080',
+          '#e6beff',
+          '#aa6e28',
+          '#06fac8',
+          '#800000',
+          '#aaffc3',
+          '#808000',
+          '#ffd8b1',
+          '#000080',
+          '#808080'],
+        borderColor: [
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+        ],
+        borderWidth: 2
+      },
+      {
+        label: 'Times Displayed',
+        data: productDisplayed,
+        backgroundColor: [
+          '#e6194b',
+          '#3cb44b',
+          '#ffe119',
+          '#0082c8',
+          '#f58231',
+          '#911eb4',
+          '#46f0f0',
+          '#f032e6',
+          '#d2f53c',
+          '#fabebe',
+          '#008080',
+          '#e6beff',
+          '#aa6e28',
+          '#06fac8',
+          '#800000',
+          '#aaffc3',
+          '#808000',
+          '#ffd8b1',
+          '#000080',
+          '#808080'],
+        borderColor: [
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+        ],
+        borderWidth: 2
+      }]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero:true
+          }
+        }]
+      },
+      responsive: false,
+      maintainAspectRatio: false
+    }
+  });
 }
 
 displayImages();
 
 function clickOne() {
-  allImages[randomForFirst].imageVote();
+  allImages[randomForFirst].numClicks++;
   displayImages();
   //console.log(productVote + ' click one, productVote');
 }
 function clickTwo() {
-  allImages[randomForSecond].imageVote();
+  allImages[randomForSecond].numClicks++;
   displayImages();
   //console.log(productVote + ' click two, productVote');
 }
 function clickThree() {
-  allImages[randomForThird].imageVote();
+  allImages[randomForThird].numClicks++;
   //console.log(productVote + ' click three, productVote');
   displayImages();
 }
