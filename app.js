@@ -1,6 +1,9 @@
 'use strict';
 
 var allImages = [];
+var productName = [];
+var productVote = [];
+var productDisplayed = [];
 var randomForFirst = 0;
 var randomForSecond = 0;
 var randomForThird = 0;
@@ -106,9 +109,134 @@ function removeClicks() {
   console.log('Remove Clicks Function');
   displayChart();
 }
+function populateArrays() {
+  for ( var i = 0; i < allImages.length; i++) {
+    productName.push(allImages[i].name);
+    productVote.push(allImages[i].numClicks);
+    productDisplayed.push(allImages[i].numDisplayed);
+    console.log(productName);
+    console.log(productVote);
+    console.log(productDisplayed);
+  }
+}
 
 function displayChart () {
-  console.log('This is how the chart will appear.');
+  populateArrays();
+  var ctx = document.getElementById('productChart').getContext('2d');
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: productName,
+      datasets: [{
+        label: 'Number of Votes',
+        data: productVote,
+        backgroundColor: [
+          '#e6194b',
+          '#3cb44b',
+          '#ffe119',
+          '#0082c8',
+          '#f58231',
+          '#911eb4',
+          '#46f0f0',
+          '#f032e6',
+          '#d2f53c',
+          '#fabebe',
+          '#008080',
+          '#e6beff',
+          '#aa6e28',
+          '#06fac8',
+          '#800000',
+          '#aaffc3',
+          '#808000',
+          '#ffd8b1',
+          '#000080',
+          '#808080'],
+        borderColor: [
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+        ],
+        borderWidth: 2
+      },
+      {
+        label: 'Times Displayed',
+        data: productDisplayed,
+        backgroundColor: [
+          '#e6194b',
+          '#3cb44b',
+          '#ffe119',
+          '#0082c8',
+          '#f58231',
+          '#911eb4',
+          '#46f0f0',
+          '#f032e6',
+          '#d2f53c',
+          '#fabebe',
+          '#008080',
+          '#e6beff',
+          '#aa6e28',
+          '#06fac8',
+          '#800000',
+          '#aaffc3',
+          '#808000',
+          '#ffd8b1',
+          '#000080',
+          '#808080'],
+        borderColor: [
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+          '#000000',
+        ],
+        borderWidth: 2
+      }]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero:true
+          }
+        }]
+      },
+      responsive: false,
+      maintainAspectRatio: false
+    }
+  });
+
   console.log(allImages);
 }
 
