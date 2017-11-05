@@ -124,17 +124,15 @@ function populateArrays() {
 
   if (localStorage.getItem('custVoteData')){
     var lastVoteArray = JSON.parse(localStorage.getItem('custVoteData'));
+    console.log(lastVoteArray + ' lastVoteArray');
     var cumulativeVoteData = [];
     for (var j = 0; j < productVote.length; j++) {
       cumulativeVoteData.push(productVote[j] + lastVoteArray[j]);
-      console.log(lastVoteArray + ' lastVoteArray');
-      console.log(productVote + ' productVote');
-      console.log(cumulativeVoteData + ' cumulativeVoteData');
-      console.log(productVote[j], lastVoteArray[j] + ' two');
-      console.log(productVote[j] + ' j');
+      console.log(productVote[j], lastVoteArray[j]);
     }
-    var productVoteString = JSON.stringify(cumulativeVoteData);
-    localStorage.custVoteData = productVoteString;
+    console.log(cumulativeVoteData + ' cumulativeVoteData');
+    var cumulativeVoteDataString = JSON.stringify(cumulativeVoteData);
+    localStorage.custVoteData = cumulativeVoteDataString;
 
   } else {
     var productVoteString = JSON.stringify(productVote);
@@ -145,14 +143,13 @@ function populateArrays() {
     var cumulativeProductDisplayedData = [];
     for (var k = 0; k < productName.length; k++) {
       cumulativeProductDisplayedData.push(lastProductDisplayedData[k] + productDisplayed[k]);
-      console.log(cumulativeProductDisplayedData + ' cumulativeProductDisplayedData');
     }
-    var productDisplayedString = JSON.stringify(productDisplayed);
-    localStorage.productDisplayedData = productNameString;
+    var cumulativeProductDisplayedString = JSON.stringify(cumulativeProductDisplayedData);
+    localStorage.productDisplayedData = cumulativeProductDisplayedString;
 
   } else {
     var productDisplayedString = JSON.stringify(productDisplayed);
-    localStorage.productDisplayedData = productNameString;
+    localStorage.productDisplayedData = productDisplayedString;
   }
 }
 
